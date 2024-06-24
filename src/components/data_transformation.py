@@ -17,10 +17,10 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 @dataclass
-class DataTransformationconfig():
+class DataTransformationconfig:
     preprocess_obj_file_path = os.path.join('artifacts', 'preprocess.pkl')
 
-class DataTransformation():
+class DataTransformation:
     def __init__(self):
         self.data_transformation_config = DataTransformationconfig()
 
