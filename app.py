@@ -31,9 +31,10 @@ def predict():
 
     prediction_pipeline = PredictionPipeline()
     prediction = int(np.round(prediction_pipeline.prediction(features = features_df)[0]))
-    
-    return render_template('home.html', results = prediction)
 
+    results = f"The predicted math_score is {prediction}"
+    
+    return render_template('home.html', results = results)
 
 if __name__ == "__main__":
     app.run(debug = True)
