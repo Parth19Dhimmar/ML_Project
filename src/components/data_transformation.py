@@ -18,7 +18,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 @dataclass
 class DataTransformationconfig:
-    preprocess_obj_file_path = os.path.join('artifacts', 'preprocess.pkl')
+    preprocess_obj_file_path = os.path.join('artifacts', 'preprocessor.pkl')
 
 class DataTransformation:
     def __init__(self):

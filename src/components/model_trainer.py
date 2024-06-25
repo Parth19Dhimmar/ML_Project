@@ -46,9 +46,57 @@ class Modeltrainer:
                       'Ada Boost' : AdaBoostRegressor(),
             }
             
+            params = {
+
+                "Linear Regression" : {},
+
+                "Logistic Regression" : {
+                    'penalty' : ['l1', 'l2']
+                },
+
+                "K Nearest Neighbor" : {
+                    'n_neighbors' : [5, 10, 20, 50, 100],
+                    #'weights' : ['uniform', 'distance'],
+                    'algorithm' : ['auto', 'ball_tree', 'kd_tree', 'brute'],
+                },
+
+                "Decision Tree Regressor" : {
+                    'criterion' : ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
+                    'splitter' : ['best', 'random'],
+                    'max_depth' : [None, 5, 10, 20],
+                    'max_features' : [None, 'sqrt', 'log2'],
+                },
+
+                "SVR" : {
+                    'kernel' : ['linear', 'poly', 'rbf', 'sigmoid',],
+                    'gamma' : ['scale', 'auto'],
+                },
+
+                "Random Forest Regressor" : {
+                    'n_estimators' : [10, 20, 50, 100],
+                    'criterion' : ['squared_error', 'absolute_error', 'friedman_mse', 'poisson'],
+                    'max_depth' : [2, 5, 10, 15, 25],
+                },
+
+                "Gradient Boosting" : {
+                    'loss' : ['squared_error', 'absolute_error', 'huber', 'quantile'],
+                    'learning_rate': [0.01, 0.1, 0.2, 0.3],
+                    'n_estimators' : [10, 20, 50, 100],
+                    'criterion' : ['squared_error', 'friedman_mse',],
+                    'max_depth' : [2, 5, 10, 15, 25],
+                    'max_features' : [None, 'sqrt', 'log2'],
+                },
+
+                "Ada Boost" : {
+                    'n_estimators' : [10, 20, 50, 100],
+                    'learning_rate': [0.01, 0.1, 0.2, 0.3],
+                    'loss' : ['linear', 'square', 'exponential'],
+                }
+            }
+
             logging.info("Model is being trained on data and evaluated...")
 
-            model_report : dict  = evaluate_models(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, models = models)
+            model_report : dict  = evaluate_models(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, models = models, params = params)
 
             max_r2_score = max(model_report.values())
 
