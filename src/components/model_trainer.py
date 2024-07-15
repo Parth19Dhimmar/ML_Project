@@ -1,6 +1,11 @@
 import os
 import sys
+import numpy as np
+import dagshub
+import mlflow
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from dataclasses import dataclass
+from urllib.parse import urlparse
 from exception import CustomException
 from logger import logging
 from utils import evaluate_models, save_object
@@ -25,6 +30,13 @@ class Modeltrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
 
+    def calculate_metrices(self, truth_values, predictions):
+        mae = mean_absolute_error(truth_values, predictions)
+        mse = mean_squared_error(truth_values, predictions)
+        rmse = np.sqrt(mse)
+        r2 = r2_score(truth_values, predictions)
+        return mae, mse, rmse, r2
+
     def initiate_model_trainer(self, train_array, test_array, preprocessor_path):
         try:
             logging.info("Splittting the train and test data...")
@@ -42,7 +54,7 @@ class Modeltrainer:
                       'Decision Tree Regressor'  : DecisionTreeRegressor(),
                       'SVR' : SVR(),
                       'Random Forest Regressor' : RandomForestRegressor(),
-                      'Gradient Boosting': GradientBoostingRegressor(),
+                      #'Gradient Boosting': GradientBoostingRegressor(),
                       'Ada Boost' : AdaBoostRegressor(),
             }
             
@@ -78,14 +90,14 @@ class Modeltrainer:
                     'max_depth' : [2, 5, 10, 15, 25],
                 },
 
-                "Gradient Boosting" : {
-                    'loss' : ['squared_error', 'absolute_error', 'huber', 'quantile'],
-                    'learning_rate': [0.01, 0.1, 0.2, 0.3],
-                    'n_estimators' : [10, 20, 50, 100],
-                    'criterion' : ['squared_error', 'friedman_mse',],
-                    'max_depth' : [2, 5, 10, 15, 25],
-                    'max_features' : [None, 'sqrt', 'log2'],
-                },
+                # "Gradient Boosting" : {
+                #     'loss' : ['squared_error', 'absolute_error', 'huber', 'quantile'],
+                #     'learning_rate': [0.01, 0.1, 0.2, 0.3],
+                #     'n_estimators' : [10, 20, 50, 100],
+                #     'criterion' : ['squared_error', 'friedman_mse',],
+                #     'max_depth' : [2, 5, 10, 15, 25],
+                #     'max_features' : [None, 'sqrt', 'log2'],
+                # },
 
                 "Ada Boost" : {
                     'n_estimators' : [10, 20, 50, 100],
@@ -103,6 +115,44 @@ class Modeltrainer:
             best_model_name = list(model_report.keys())[list(model_report.values()).index(max_r2_score)]
 
             best_model = models[best_model_name] #to get current state of respective model
+
+            y_pred = best_model.predict(X_test)
+
+            print("This is the best model: ", best_model_name)
+
+            actual_model = ""
+
+            model_names = list(params.keys())
+
+            for model in model_names:
+                if model == best_model_name:
+                    actual_model += model
+
+            best_params = params[actual_model]
+            
+
+            dagshub.init(repo_owner='Parth19Dhimmar', repo_name='ML_Project', mlflow=True)
+
+            mlflow.set_registry_uri("https://dagshub.com/Parth19Dhimmar/ML_Project.mlflow")
+            tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+            #mlflow.set_experiment("Model Monitoring")
+
+            #mlflow         
+
+            with mlflow.start_run():
+                mlflow.log_params(params)
+
+                mae, mse, rmse, r2 = self.calculate_metrices(y_test, y_pred)
+
+                mlflow.log_metric("mae", mae)
+                mlflow.log_metric("mse", mse)
+                mlflow.log_metric("rmse", rmse)
+                mlflow.log_metric("r2", r2)
+
+                if tracking_url_type_store != "file":
+                    mlflow.sklearn.log_model(best_model, "model", registered_model_name=actual_model)
+                else:
+                    mlflow.sklearn.log_model(best_model, "model")
 
             if max_r2_score < 0.6:
                 raise CustomException("No best model found!")

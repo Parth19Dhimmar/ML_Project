@@ -5,4 +5,6 @@ scikit-learn
 dill
 xgboost
 flask
+mlflow
+dagshub
 #-e .
