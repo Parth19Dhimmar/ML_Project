@@ -131,24 +131,26 @@ class Modeltrainer:
             best_params = params[actual_model]
             
 
-            dagshub.init(repo_owner='Parth19Dhimmar', repo_name='ML_Project', mlflow=True)
+            #dagshub.init(repo_owner='Parth19Dhimmar', repo_name='ML_Project', mlflow=True) #run if data not exported in os environment at project path
 
             mlflow.set_registry_uri("https://dagshub.com/Parth19Dhimmar/ML_Project.mlflow")
             tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
-            #mlflow.set_experiment("Model Monitoring")
 
-            #mlflow         
+            # mlflow
 
             with mlflow.start_run():
-                mlflow.log_params(params)
 
                 mae, mse, rmse, r2 = self.calculate_metrices(y_test, y_pred)
 
+                mlflow.log_params(best_params)
+
                 mlflow.log_metric("mae", mae)
-                mlflow.log_metric("mse", mse)
+                mlflow.log_metric("mse", mse)   
                 mlflow.log_metric("rmse", rmse)
                 mlflow.log_metric("r2", r2)
 
+
+                # Model registry does not work with file store
                 if tracking_url_type_store != "file":
                     mlflow.sklearn.log_model(best_model, "model", registered_model_name=actual_model)
                 else:
