@@ -2,10 +2,36 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import pymysql
 import dill
+from logger import logging
+from dotenv import load_dotenv
 from sklearn.metrics import r2_score
 from exception import CustomException
 from sklearn.model_selection import GridSearchCV
+
+load_dotenv()
+
+host = os.getenv('DB_HOST')
+user = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
+db = os.getenv('DB_NAME')
+
+def read_sql_data():
+    logging.info("reading SQL Database started...")
+    conn = pymysql.connect(
+        host = host,
+        user = user,
+        password = password,
+        db = db
+    )
+    logging.info("Connection Established!...")
+
+    df = pd.read_sql_query("select * from students", conn)
+    print(df)
+    conn.close()
+
+    return df
 
 def save_object(file_path, obj):
     try : 
