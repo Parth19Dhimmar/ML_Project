@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Parth/ML/Projects/MLOPS/ML_Project/mlruns/0/452499c80b4948bfad6f97a6a176ab50/artifacts
+end_time: 1721040175543
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 452499c80b4948bfad6f97a6a176ab50
+run_name: abrasive-pug-925
+run_uuid: 452499c80b4948bfad6f97a6a176ab50
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721040168215
+status: 3
+tags: []
+user_id: tcs-157

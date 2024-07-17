@@ -4,9 +4,9 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from logger import logging
-from exception import CustomException
-from utils import save_object
+from src.logger import logging
+from src.exception import CustomException
+from src.utils import save_object
 
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer

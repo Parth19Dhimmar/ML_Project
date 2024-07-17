@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/Parth/ML/Projects/MLOPS/ML_Project/mlruns/0/abb8ab05900747a890d4bdca9e6a8616/artifacts
+end_time: 1721041431736
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: abb8ab05900747a890d4bdca9e6a8616
+run_name: judicious-sloth-188
+run_uuid: abb8ab05900747a890d4bdca9e6a8616
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1721041424124
+status: 3
+tags: []
+user_id: tcs-157

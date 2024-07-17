@@ -4,5 +4,10 @@ seaborn
 scikit-learn
 dill
 xgboost
+python-dotenv
+pymysql
+mysql-connector-python
 flask
+mlflow
+dagshub
 #-e .
