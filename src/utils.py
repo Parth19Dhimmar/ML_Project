@@ -4,10 +4,10 @@ import pandas as pd
 import numpy as np
 import pymysql
 import dill
-from logger import logging
+from src.logger import logging
+from src.exception import CustomException
 from dotenv import load_dotenv
 from sklearn.metrics import r2_score
-from exception import CustomException
 from sklearn.model_selection import GridSearchCV
 
 load_dotenv()

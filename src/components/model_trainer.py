@@ -6,9 +6,9 @@ import mlflow
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from dataclasses import dataclass
 from urllib.parse import urlparse
-from exception import CustomException
-from logger import logging
-from utils import evaluate_models, save_object
+from src.logger import logging
+from src.exception import CustomException
+from src.utils import evaluate_models, save_object
 
 from sklearn.model_selection import train_test_split 
 from sklearn.linear_model import LinearRegression, LogisticRegression
